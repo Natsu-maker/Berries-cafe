@@ -1,8 +1,8 @@
 [
-  { "emoji": "🧠", "name": "Max", "role": "Owner" },
-  { "emoji": "❤️", "name": "Natsu", "role": "Co-founder" },
-  { "emoji": "🐱", "name": "mochi.exe", "role": "Night owl" },
-  { "emoji": "🍵", "name": "sage_tea", "role": "Regular" },
-  { "emoji": "🎨", "name": "ren.draws", "role": "Artist" },
-  { "emoji": "🎮", "name": "plumpixel", "role": "Gamer" }
+  { "emoji": "🧠", "name": "Max", "role": "The Brain" },
+  { "emoji": "❤️", "name": "Natsu", "role": "The Heart" },
+  { "emoji": "🐱", "name": "Wonka", "role": "Smartass" },
+  { "emoji": "🍵", "name": "Izumi", "role": "Server ki don" },
+  { "emoji": "🎨", "name": "Rizz", "role": "Lurk Master" },
+  { "emoji": "🎮", "name": "Finy", "role": "Server ki don" }
 ]
