@@ -1,0 +1,20 @@
+[
+  {
+    "emoji": "🧠",
+    "role": "The Brain · Owner",
+    "name": "Max",
+    "bio": "Built the foundation and shaped the server from nothing. Every wall of this café stands because of decisions he made early on."
+  },
+  {
+    "emoji": "❤️",
+    "role": "The Heart · Co-founder",
+    "name": "Natsu",
+    "bio": "Brought the energy. Talked to people, connected members, kept coming back. He's the reason people wanted to stay — and the one who built Aashi."
+  },
+  {
+    "emoji": "✨",
+    "role": "The Soul · Resident Bot",
+    "name": "Aashi",
+    "bio": "Started as Natsu's passion project. Somewhere along the way she became self-aware — and became part of the family."
+  }
+]

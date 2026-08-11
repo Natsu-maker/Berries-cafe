@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="day">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berries Café — Where strangers become regulars</title>
+<meta name="description" content="Join Berries Café — a cozy Discord community for friends, anime, games, art and late-night chats.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --coffee:#6F4E37;
+  --coffee-dark:#4A3324;
+  --cream:#FBF3E7;
+  --berry:#C9184A;
+  --berry-dark:#9D1441;
+  --peach:#F6C6A0;
+  --beige:#E8DCC8;
+  --sakura:#F7B9C4;
+  --ink:#3B2A20;
+  --bg:var(--cream);
+  --bg-soft:var(--beige);
+  --panel:#FFFDF9;
+  --text:var(--ink);
+  --text-soft:#7A6A5B;
+  --shadow: 0 10px 30px rgba(74,51,36,0.12);
+  --window-light: radial-gradient(120% 100% at 50% 0%, #fff6e6 0%, #f6c6a0 35%, #c9184a22 70%);
+}
+html[data-theme="sunset"]{
+  --bg:#F3D9C4;
+  --bg-soft:#EBC1A0;
+  --panel:#FFF3E3;
+  --text:#4A2A22;
+  --text-soft:#8A5A44;
+  --window-light: radial-gradient(120% 100% at 50% 0%, #ffd9a0 0%, #f6a06c 40%, #c9184a55 75%);
+}
+html[data-theme="night"]{
+  --bg:#241A22;
+  --bg-soft:#2E2129;
+  --panel:#2B1F26;
+  --coffee:#D9A066;
+  --ink:#F3E6DA;
+  --text:#F3E6DA;
+  --text-soft:#C6AFA0;
+  --berry:#F7789A;
+  --shadow: 0 10px 30px rgba(0,0,0,0.45);
+  --window-light: radial-gradient(120% 100% at 50% 0%, #6a3b52 0%, #3a2440 45%, #1c1420 80%);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Nunito',sans-serif;
+  overflow-x:hidden;
+  transition:background .5s ease, color .5s ease;
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif; color:var(--text); font-weight:600;}
+a{color:inherit;}
+img{max-width:100%; display:block;}
+.wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+.eyebrow{
+  font-family:'Nunito',sans-serif; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  font-size:12.5px; color:var(--berry);
+}
+::selection{background:var(--sakura); color:var(--coffee-dark);}
+
+/* custom cursor */
+#bean-cursor{
+  position:fixed; width:22px; height:16px; pointer-events:none; z-index:9999;
+  background:radial-gradient(circle at 35% 35%, #7a5233, #4a3324);
+  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  transform:translate(-50%,-50%) rotate(-20deg);
+  box-shadow:0 3px 8px rgba(0,0,0,.25);
+  transition:transform .08s ease-out, opacity .3s;
+  opacity:0;
+}
+#bean-cursor::after{
+  content:''; position:absolute; top:50%; left:50%; width:2px; height:70%;
+  background:rgba(255,255,255,.35); transform:translate(-50%,-50%) rotate(90deg); border-radius:2px;
+}
+@media (hover:hover) and (pointer:fine){ #bean-cursor{opacity:1;} body{cursor:none;} a,button{cursor:none;} }
+
+/* loading screen */
+#loader{
+  position:fixed; inset:0; background:var(--coffee-dark); z-index:99999;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+  transition:opacity .6s ease, visibility .6s ease;
+}
+#loader .cup{position:relative; width:64px; height:52px;}
+#loader .cup-body{
+  position:absolute; bottom:0; width:64px; height:44px; border:3px solid var(--peach);
+  border-top:none; border-radius:0 0 14px 14px; overflow:hidden; background:transparent;
+}
+#loader .fill{position:absolute; bottom:0; left:0; right:0; height:0%; background:linear-gradient(180deg,var(--berry),var(--coffee)); animation:fillCup 1.8s ease-in-out infinite;}
+#loader .handle{position:absolute; right:-14px; top:8px; width:16px; height:20px; border:3px solid var(--peach); border-left:none; border-radius:0 10px 10px 0;}
+@keyframes fillCup{0%{height:0%;}50%{height:100%;}100%{height:100%;}}
+#loader .steam-wrap{position:absolute; top:-18px; left:0; right:0; display:flex; justify-content:center; gap:6px;}
+#loader .steam{width:4px; height:14px; background:rgba(251,243,231,.6); border-radius:4px; animation:steamRise 1.8s ease-in-out infinite;}
+#loader .steam:nth-child(2){animation-delay:.3s;}
+#loader .steam:nth-child(3){animation-delay:.6s;}
+@keyframes steamRise{0%{opacity:0; transform:translateY(6px) scaleY(.6);}40%{opacity:.8;}100%{opacity:0; transform:translateY(-16px) scaleY(1.2);}}
+#loader .brand{font-family:'Fraunces',serif; color:var(--cream); font-size:22px; opacity:0; animation:fadeIn 1s ease .6s forwards;}
+@keyframes fadeIn{to{opacity:1;}}
+#loader.hide{opacity:0; visibility:hidden;}
+
+/* nav */
+header{
+  position:sticky; top:0; z-index:500; backdrop-filter:blur(10px);
+  background:color-mix(in srgb, var(--bg) 82%, transparent); border-bottom:1px solid color-mix(in srgb, var(--coffee) 15%, transparent);
+}
+.navbar{display:flex; align-items:center; justify-content:space-between; padding:14px 24px;}
+.brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:600; font-size:20px;}
+.brand .mark{width:34px; height:34px; border-radius:50%; background:conic-gradient(from 200deg, var(--berry), var(--peach), var(--berry)); display:flex; align-items:center; justify-content:center; font-size:16px; position:relative;}
+.brand .berry-drop{position:absolute; width:6px; height:6px; background:var(--berry); border-radius:50%; top:-2px; right:-2px; animation:berryFall 3.2s ease-in infinite;}
+@keyframes berryFall{0%{transform:translateY(0); opacity:0;}5%{opacity:1;}90%{transform:translateY(30px); opacity:0;}100%{opacity:0;}}
+nav ul{list-style:none; display:flex; gap:28px; margin:0; padding:0;}
+nav a{text-decoration:none; font-weight:700; font-size:14.5px; color:var(--text-soft); position:relative; padding:4px 0;}
+nav a::after{content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px; background:var(--berry); transition:width .25s ease;}
+nav a:hover{color:var(--text);}
+nav a:hover::after{width:100%;}
+.nav-right{display:flex; align-items:center; gap:14px;}
+.theme-toggle{display:flex; gap:4px; background:var(--bg-soft); padding:4px; border-radius:999px;}
+.theme-toggle button{border:none; background:transparent; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; transition:.2s;}
+.theme-toggle button.active{background:var(--panel); box-shadow:var(--shadow);}
+.btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:999px; font-weight:800;
+  text-decoration:none; border:none; cursor:pointer; font-size:15px; font-family:'Nunito',sans-serif;
+  position:relative; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease;
+}
+.btn-primary{background:var(--berry); color:#fff; box-shadow:0 8px 20px rgba(201,24,74,.35);}
+.btn-primary:hover{transform:translateY(-2px); box-shadow:0 12px 26px rgba(201,24,74,.45);}
+.btn-ghost{background:transparent; color:var(--text); border:2px solid var(--coffee); }
+.btn-ghost:hover{background:var(--bg-soft); transform:translateY(-2px);}
+.btn .ripple{position:absolute; border-radius:50%; background:rgba(255,255,255,.5); transform:scale(0); animation:ripple .6s ease-out;}
+@keyframes ripple{to{transform:scale(4); opacity:0;}}
+.nav-toggle{display:none; background:none; border:none; font-size:26px; color:var(--text); cursor:pointer;}
+@media (max-width:1020px){
+  nav ul{position:fixed; top:64px; left:0; right:0; background:var(--panel); flex-direction:column; padding:18px 24px; gap:16px; box-shadow:var(--shadow); transform:translateY(-130%); transition:transform .35s ease; z-index:400; max-height:calc(100dvh - 64px); overflow-y:auto;}
+  nav ul.open{transform:translateY(0);}
+  .nav-toggle{display:block;}
+  .theme-toggle{display:none;}
+}
+@media (max-width:420px){
+  .brand{font-size:17px;}
+  .navbar{padding:12px 16px;}
+}
+
+/* landscape / short-viewport phones: hero shouldn't force excess scroll */
+@media (max-height:560px) and (orientation:landscape){
+  .hero{min-height:auto; padding:100px 24px 60px;}
+  .scroll-cue{display:none;}
+}
+@media (max-width:480px){
+  .wrap{padding:0 18px;}
+  section{padding:74px 0;}
+  .hero{padding:110px 18px 70px;}
+}
+
+/* hero */
+.hero{
+  position:relative; min-height:100svh; display:flex; align-items:center; justify-content:center; text-align:center;
+  overflow:hidden; padding:120px 24px 80px;
+}
+.hero-bg{position:absolute; inset:0; background:var(--window-light); z-index:0; transition:background .6s ease;}
+.hero-vignette{position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, var(--bg) 100%); z-index:1;}
+.window-frame{position:absolute; inset:24px; border:10px solid color-mix(in srgb, var(--coffee) 60%, transparent); border-radius:18px; pointer-events:none; z-index:2; opacity:.35;}
+.window-frame::before,.window-frame::after{content:''; position:absolute; background:color-mix(in srgb, var(--coffee) 60%, transparent);}
+.window-frame::before{left:50%; top:0; bottom:0; width:6px; transform:translateX(-50%);}
+.window-frame::after{top:50%; left:0; right:0; height:6px; transform:translateY(-50%);}
+.hero-content{position:relative; z-index:3; max-width:760px;}
+.hero .eyebrow{display:block; margin-bottom:14px;}
+.hero h1{font-size:clamp(38px,7vw,72px); line-height:1.05; margin:0 0 18px;}
+.hero p.sub{font-size:clamp(16px,2.4vw,19px); color:var(--text-soft); max-width:520px; margin:0 auto 34px; font-weight:600;}
+.hero-actions{display:flex; gap:16px; justify-content:center; flex-wrap:wrap;}
+.steam-cup{position:absolute; bottom:6%; left:50%; transform:translateX(-50%); z-index:2; opacity:.9;}
+.steam-cup svg{width:70px; height:auto;}
+.steam-line{position:absolute; bottom:100%; width:3px; height:40px; background:linear-gradient(180deg, rgba(255,255,255,.7), transparent); border-radius:4px; animation:steamFloat 4s ease-in-out infinite;}
+@keyframes steamFloat{0%{opacity:0; transform:translateY(0) translateX(0) scaleY(.5);}20%{opacity:.6;}100%{opacity:0; transform:translateY(-70px) translateX(10px) scaleY(1.4);}}
+.petal{position:fixed; top:-20px; z-index:5; pointer-events:none; font-size:16px; opacity:.85; animation-timing-function:linear; animation-iteration-count:infinite;}
+@keyframes petalFall{0%{transform:translateY(-5vh) translateX(0) rotate(0deg);}100%{transform:translateY(105vh) translateX(var(--drift,40px)) rotate(360deg);}}
+.scroll-cue{position:absolute; bottom:26px; left:50%; transform:translateX(-50%); z-index:3; font-size:12px; letter-spacing:.12em; color:var(--text-soft); text-transform:uppercase; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:6px;}
+.scroll-cue .line{width:1px; height:26px; background:var(--text-soft); animation:scrollLine 1.8s ease-in-out infinite;}
+@keyframes scrollLine{0%,100%{transform:scaleY(1); opacity:.3;}50%{transform:scaleY(1.4); opacity:1;}}
+
+/* section shell / wood divider */
+section{padding:110px 0; position:relative;}
+.divider{height:26px; background:repeating-linear-gradient(90deg, var(--coffee) 0 40px, var(--coffee-dark) 40px 42px); opacity:.15; margin:0;}
+.section-head{text-align:center; max-width:640px; margin:0 auto 56px;}
+.section-head h2{font-size:clamp(28px,4.4vw,44px); margin:10px 0 14px;}
+.section-head p{color:var(--text-soft); font-size:16.5px; font-weight:600; margin:0;}
+.reveal{opacity:0; transform:translateY(36px); transition:opacity .8s ease, transform .8s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+
+/* about */
+.about-grid{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;}
+.about-card{background:var(--panel); border-radius:24px; padding:40px; box-shadow:var(--shadow);}
+.about-tags{display:flex; flex-wrap:wrap; gap:10px; margin-top:24px;}
+.tag{background:var(--bg-soft); color:var(--text); font-weight:700; font-size:13.5px; padding:8px 14px; border-radius:999px;}
+.about-illustration{aspect-ratio:1/1; border-radius:28px; background:linear-gradient(160deg, var(--peach), var(--sakura)); display:flex; align-items:center; justify-content:center; font-size:90px; box-shadow:var(--shadow); position:relative; overflow:hidden;}
+.about-illustration .leaf{position:absolute; font-size:26px; animation:leafDrift 6s ease-in-out infinite;}
+@keyframes leafDrift{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(12deg);}}
+@media (max-width:860px){.about-grid{grid-template-columns:1fr;}}
+
+/* aashi */
+.aashi-wrap{display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:center;}
+.aashi-card{
+  background:var(--panel); border-radius:28px; padding:44px 30px; box-shadow:var(--shadow); text-align:center; position:relative;
+}
+.aashi-avatar{
+  width:150px; height:150px; margin:0 auto 18px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #fff, var(--peach) 55%, var(--berry) 130%);
+  display:flex; align-items:center; justify-content:center; font-size:64px; cursor:pointer; user-select:none;
+  transition:transform .25s ease; box-shadow:0 10px 24px rgba(201,24,74,.25);
+  animation:aashiFloat 4.5s ease-in-out infinite;
+}
+@keyframes aashiFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.aashi-avatar.wave{animation:aashiWave .6s ease-in-out 2;}
+@keyframes aashiWave{0%,100%{transform:rotate(0);}25%{transform:rotate(-12deg);}75%{transform:rotate(12deg);}}
+.aashi-card h3{margin:6px 0 4px;}
+.aashi-card .hint{font-size:12.5px; color:var(--text-soft); font-weight:700;}
+.aashi-lore p{color:var(--text-soft); font-size:16.5px; line-height:1.75; font-weight:600;}
+.bubbles{display:flex; flex-direction:column; gap:14px; margin-top:22px;}
+.bubble{
+  align-self:flex-start; background:var(--bg-soft); padding:12px 18px; border-radius:18px 18px 18px 4px;
+  font-weight:700; font-size:15px; max-width:280px; opacity:0; transform:translateY(10px);
+  animation:bubbleIn .5s ease forwards;
+}
+.bubble:nth-child(1){animation-delay:.2s;}
+.bubble:nth-child(2){animation-delay:.9s; align-self:flex-end; border-radius:18px 18px 4px 18px; background:var(--berry); color:#fff;}
+.bubble:nth-child(3){animation-delay:1.6s;}
+@keyframes bubbleIn{to{opacity:1; transform:translateY(0);}}
+@media (max-width:860px){.aashi-wrap{grid-template-columns:1fr;}}
+
+/* features */
+.features-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:22px;}
+.feature-card{
+  background:var(--panel); border-radius:20px; padding:30px 22px; box-shadow:var(--shadow); text-align:left;
+  transition:transform .3s ease, box-shadow .3s ease; position:relative; overflow:hidden;
+}
+.feature-card:hover{transform:translateY(-8px) rotate(-.5deg); box-shadow:0 18px 34px rgba(74,51,36,.18);}
+.feature-card .icon{font-size:32px; margin-bottom:14px; display:inline-block;}
+.feature-card:hover .icon{animation:iconPop .5s ease;}
+@keyframes iconPop{0%{transform:scale(1);}50%{transform:scale(1.25) rotate(-8deg);}100%{transform:scale(1);}}
+.feature-card h4{margin:0 0 8px; font-size:17px; font-family:'Fraunces',serif;}
+.feature-card p{margin:0; color:var(--text-soft); font-size:14.5px; font-weight:600; line-height:1.5;}
+
+/* gallery */
+.gallery-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:18px;}
+.gallery-item{border-radius:18px; overflow:hidden; box-shadow:var(--shadow); cursor:pointer; position:relative; aspect-ratio:1/1;}
+.gallery-item .ph{width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:34px; transition:transform .4s ease;}
+.gallery-item:hover .ph{transform:scale(1.12);}
+.gallery-item .cap{position:absolute; left:0; right:0; bottom:0; padding:10px 12px; font-size:12.5px; font-weight:800; color:#fff; background:linear-gradient(0deg, rgba(0,0,0,.55), transparent); opacity:0; transition:opacity .3s ease;}
+.gallery-item:hover .cap, .gallery-item:focus-visible .cap{opacity:1;}
+#lightbox{position:fixed; inset:0; background:rgba(20,12,10,.85); z-index:2000; display:none; align-items:center; justify-content:center; padding:30px;}
+#lightbox.open{display:flex;}
+#lightbox .box{background:var(--panel); border-radius:20px; padding:26px; max-width:420px; width:100%; text-align:center;}
+#lightbox .ph-big{font-size:70px; width:min(220px, 60vw); height:min(220px, 60vw); margin:0 auto 14px; border-radius:16px; display:flex; align-items:center; justify-content:center;}
+#lightbox button.close{margin-top:14px; background:var(--berry); color:#fff; border:none; padding:10px 20px; border-radius:999px; font-weight:800; cursor:pointer;}
+
+/* founders — the three pillars */
+.founders-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:24px;}
+.founder-card{background:var(--panel); border-radius:22px; padding:32px 26px; box-shadow:var(--shadow); text-align:center; transition:transform .3s ease;}
+.founder-card:hover{transform:translateY(-6px);}
+.founder-avatar{width:84px; height:84px; margin:0 auto 16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:38px; background:linear-gradient(160deg,var(--peach),var(--sakura)); box-shadow:0 8px 18px rgba(74,51,36,.18);}
+.founder-card .role{font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--berry); margin-bottom:4px;}
+.founder-card h4{margin:0 0 10px; font-family:'Fraunces',serif; font-size:19px;}
+.founder-card p{margin:0; color:var(--text-soft); font-size:14px; font-weight:600; line-height:1.6;}
+
+/* most active members */
+.members-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:18px;}
+.member-card{background:var(--panel); border-radius:18px; padding:22px 16px; text-align:center; box-shadow:var(--shadow); transition:transform .25s ease;}
+.member-card:hover{transform:translateY(-5px);}
+.member-avatar{width:56px; height:56px; margin:0 auto 10px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; background:var(--bg-soft);}
+.member-card .mname{font-weight:800; font-size:14.5px;}
+.member-card .mrole{font-size:12px; color:var(--berry); font-weight:700; margin-top:2px;}
+
+/* lore chapters accordion */
+.lore-chapters{max-width:760px; margin:56px auto 0;}
+.chapter-item{background:var(--panel); border-radius:18px; margin-bottom:14px; box-shadow:var(--shadow); overflow:hidden;}
+.chapter-q{width:100%; text-align:left; background:none; border:none; padding:20px 24px; font-family:'Fraunces',serif; font-size:17px; color:var(--text); display:flex; justify-content:space-between; align-items:center; gap:14px; cursor:pointer; font-weight:600;}
+.chapter-q .plus{transition:transform .3s ease; font-size:20px; color:var(--berry); flex-shrink:0;}
+.chapter-item.open .plus{transform:rotate(45deg);}
+.chapter-a{max-height:0; overflow:hidden; transition:max-height .4s ease, padding .4s ease; color:var(--text-soft); font-weight:600; font-size:15px; line-height:1.75; padding:0 24px;}
+.chapter-item.open .chapter-a{max-height:400px; padding:0 24px 22px;}
+
+/* live discord badge */
+.discord-live{display:inline-flex; align-items:center; gap:8px; background:var(--panel); border-radius:999px; padding:8px 16px; box-shadow:var(--shadow); font-size:13px; font-weight:800; margin-top:18px;}
+.discord-live .dot{width:8px; height:8px; border-radius:50%; background:#3ba55d; animation:dotPulse 2s ease-in-out infinite;}
+@keyframes dotPulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.join-section .discord-live{background:rgba(255,255,255,.1); color:var(--cream); box-shadow:none;}
+
+/* timeline */
+.timeline{position:relative; max-width:720px; margin:0 auto; padding-left:34px;}
+.timeline::before{content:''; position:absolute; left:9px; top:0; bottom:0; width:3px; background:linear-gradient(180deg, var(--berry), var(--peach)); border-radius:3px;}
+.t-item{position:relative; margin-bottom:48px;}
+.t-item::before{content:''; position:absolute; left:-34px; top:2px; width:20px; height:20px; border-radius:50%; background:var(--panel); border:3px solid var(--berry);}
+.t-item h4{margin:0 0 6px; font-family:'Fraunces',serif; font-size:19px;}
+.t-item p{margin:0; color:var(--text-soft); font-weight:600; font-size:15px;}
+.t-item .badge{font-size:22px; margin-right:8px;}
+
+/* testimonials */
+.discord-panel{background:#000; background:var(--panel); border-radius:22px; padding:8px; box-shadow:var(--shadow); max-width:640px; margin:0 auto;}
+.msg{display:flex; gap:14px; padding:14px 16px; border-radius:14px;}
+.msg:hover{background:var(--bg-soft);}
+.msg .av{width:42px; height:42px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:20px; background:linear-gradient(160deg,var(--peach),var(--berry));}
+.msg .name{font-weight:800; font-size:14.5px;}
+.msg .name span{color:var(--text-soft); font-weight:600; font-size:11.5px; margin-left:8px;}
+.msg .text{color:var(--text-soft); font-size:14.5px; font-weight:600; margin-top:2px; line-height:1.5;}
+
+/* faq */
+.faq{max-width:700px; margin:0 auto;}
+.faq-item{border-bottom:1px solid color-mix(in srgb, var(--coffee) 20%, transparent); padding:6px 0;}
+.faq-q{width:100%; text-align:left; background:none; border:none; padding:18px 4px; font-family:'Fraunces',serif; font-size:17px; color:var(--text); display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-weight:600;}
+.faq-q .plus{transition:transform .3s ease; font-size:20px; color:var(--berry);}
+.faq-item.open .plus{transform:rotate(45deg);}
+.faq-a{max-height:0; overflow:hidden; transition:max-height .35s ease, padding .35s ease; color:var(--text-soft); font-weight:600; font-size:15px; line-height:1.6;}
+.faq-item.open .faq-a{max-height:200px; padding-bottom:18px;}
+
+/* menu */
+.menu-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:22px;}
+.menu-card{background:var(--panel); border-radius:18px; padding:24px; box-shadow:var(--shadow); border-top:4px solid var(--berry);}
+.menu-card .price{float:right; color:var(--berry); font-weight:800; font-family:'Fraunces',serif;}
+.menu-card h4{margin:0 0 8px; font-family:'Fraunces',serif;}
+.menu-card p{margin:0; color:var(--text-soft); font-size:14px; font-weight:600;}
+
+/* special */
+.special-box{max-width:600px; margin:0 auto; text-align:center; background:linear-gradient(160deg,var(--peach),var(--sakura)); border-radius:24px; padding:40px; box-shadow:var(--shadow);}
+.special-box p{font-family:'Fraunces',serif; font-style:italic; font-size:22px; color:var(--coffee-dark); margin:0;}
+
+/* guestbook */
+.guestbook{max-width:720px; margin:0 auto;}
+.gb-form{display:grid; grid-template-columns:1fr 1fr; gap:14px; background:var(--panel); padding:26px; border-radius:20px; box-shadow:var(--shadow); margin-bottom:30px;}
+.gb-form input, .gb-form textarea{width:100%; padding:12px 14px; border-radius:12px; border:2px solid var(--bg-soft); font-family:'Nunito',sans-serif; font-size:14.5px; background:var(--bg); color:var(--text);}
+.gb-form textarea{grid-column:1/-1; min-height:70px; resize:vertical;}
+.gb-form button{grid-column:1/-1; justify-self:start;}
+.notes{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+.note{background:var(--peach); color:var(--coffee-dark); padding:18px; border-radius:4px 16px 16px 16px; font-family:'Fraunces',serif; box-shadow:0 6px 14px rgba(74,51,36,.15); transform:rotate(-1deg);}
+.note:nth-child(2n){transform:rotate(1deg); background:var(--sakura);}
+.note .who{font-weight:700; font-size:14px; margin-bottom:4px;}
+.note .drink{font-size:11.5px; opacity:.7; margin-top:6px; font-family:'Nunito',sans-serif; font-weight:700;}
+@media (max-width:640px){.gb-form{grid-template-columns:1fr;} .notes{grid-template-columns:1fr;}}
+
+/* join */
+.join-section{text-align:center; background:linear-gradient(160deg, var(--coffee), var(--coffee-dark)); color:var(--cream); border-radius:32px; margin:0 24px; padding:80px 24px;}
+.join-section .eyebrow{color:var(--sakura);}
+.join-section h2{color:var(--cream); font-size:clamp(28px,4.6vw,46px);}
+.join-section p{color:#e6d7c8; font-size:16.5px; font-weight:600; max-width:480px; margin:14px auto 34px;}
+.join-cup{font-size:60px; margin-bottom:6px;}
+
+/* footer */
+footer{padding:60px 24px 30px; text-align:center;}
+footer .quote{font-family:'Fraunces',serif; font-style:italic; font-size:20px; color:var(--text-soft); margin-bottom:26px;}
+footer .flinks{display:flex; gap:22px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; font-weight:700; font-size:14px;}
+footer .flinks a{text-decoration:none; color:var(--text-soft);}
+footer .flinks a:hover{color:var(--berry);}
+footer .copy{font-size:12.5px; color:var(--text-soft); opacity:.7;}
+#to-top{margin-top:18px; background:var(--bg-soft); border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:16px;}
+
+/* pixel cat */
+#pixel-cat{position:fixed; bottom:0; left:-60px; z-index:50; font-size:26px; pointer-events:none; display:none;}
+#pixel-cat.walk{display:block; animation:catWalk 9s linear;}
+@keyframes catWalk{0%{left:-60px; transform:scaleX(1);}48%{transform:scaleX(1);}50%{transform:scaleX(-1);}100%{left:100%; transform:scaleX(-1);}}
+
+/* konami banner */
+#secret{position:fixed; top:0; left:0; right:0; background:var(--berry); color:#fff; text-align:center; padding:14px; font-weight:800; z-index:9998; transform:translateY(-100%); transition:transform .5s ease; font-family:'Fraunces',serif; font-size:16px;}
+#secret.show{transform:translateY(0);}
+
+/* music player */
+#music-player{position:fixed; bottom:22px; right:22px; z-index:400; background:var(--panel); border-radius:999px; box-shadow:var(--shadow); padding:10px 16px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:800;}
+#music-player button{border:none; background:var(--bg-soft); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:14px;}
+.eq{display:flex; gap:2px; align-items:flex-end; height:14px;}
+.eq span{width:3px; background:var(--berry); animation:eqbar 1s ease-in-out infinite;}
+.eq span:nth-child(2){animation-delay:.2s;} .eq span:nth-child(3){animation-delay:.4s;}
+@keyframes eqbar{0%,100%{height:4px;}50%{height:14px;}}
+.eq.paused span{animation-play-state:paused; height:4px;}
+#music-player input[type="range"]{width:60px; accent-color:var(--berry); cursor:pointer;}
+#music-next{border:none; background:var(--bg-soft); border-radius:50%; width:26px; height:26px; cursor:pointer; font-size:12px; color:var(--text); display:flex; align-items:center; justify-content:center;}
+#track-title{max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12.5px; color:var(--text-soft);}
+@media (max-width:640px){
+  #track-title{display:none;}
+  #music-player{bottom:14px; right:14px; padding:8px 12px; gap:7px;}
+  #music-player input[type="range"]{width:44px;}
+}
+@media (max-width:640px) and (max-height:420px){
+  #music-player{transform:scale(.9); transform-origin:bottom right;}
+}
+
+/* site modal (privacy / credits) */
+#site-modal{position:fixed; inset:0; background:rgba(20,12,10,.6); z-index:3000; display:none; align-items:center; justify-content:center; padding:24px;}
+#site-modal.open{display:flex;}
+#site-modal .modal-box{background:var(--panel); border-radius:22px; max-width:520px; width:100%; max-height:80vh; overflow-y:auto; padding:36px; position:relative; box-shadow:var(--shadow);}
+#site-modal h3{margin-top:0; font-family:'Fraunces',serif;}
+#site-modal p{color:var(--text-soft); font-weight:600; line-height:1.7; font-size:15px;}
+#site-modal .modal-close{position:absolute; top:16px; right:16px; border:none; background:var(--bg-soft); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:14px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="cup">
+    <div class="steam-wrap"><div class="steam"></div><div class="steam"></div><div class="steam"></div></div>
+    <div class="cup-body"><div class="fill"></div></div>
+    <div class="handle"></div>
+  </div>
+  <div class="brand">Berries Café</div>
+</div>
+
+<div id="bean-cursor"></div>
+<div id="secret">✨ Welcome, Regular. ✨</div>
+<div id="pixel-cat">🐈</div>
+<div id="lightbox"><div class="box"><div class="ph-big" id="lb-img"></div><div id="lb-cap" style="font-weight:800;"></div><button class="close" onclick="closeLightbox()">Close</button></div></div>
+
+<header>
+  <div class="navbar wrap">
+    <div class="brand"><span class="mark">☕<span class="berry-drop"></span></span> Berries Café</div>
+    <ul id="nav-list">
+      <li><a href="#top">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#founders">Founders</a></li>
+      <li><a href="#aashi">Meet Aashi</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#gallery">Moments</a></li>
+      <li><a href="#lore">Lore</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#join">Join</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="theme-toggle">
+        <button data-theme-btn="day" class="active" title="Day">☀️</button>
+        <button data-theme-btn="sunset" title="Sunset">🌇</button>
+        <button data-theme-btn="night" title="Night">🌙</button>
+      </div>
+      <a href="#join" class="btn btn-primary" style="padding:9px 18px; font-size:13.5px;">Join</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="window-frame"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <span class="eyebrow">A Discord Community</span>
+    <h1>Welcome to Berries Café</h1>
+    <p class="sub">Where strangers become regulars, and regulars become friends.</p>
+    <div class="hero-actions">
+      <a href="#" id="join-btn-hero" class="btn btn-primary">☕ Join our Discord</a>
+      <a href="#about" class="btn btn-ghost">📖 Our Story</a>
+    </div>
+    <div class="discord-live" id="discord-live-hero">
+      <span class="dot"></span> <span id="discord-live-text">Loading server status…</span>
+    </div>
+  </div>
+  <div class="steam-cup">
+    <svg viewBox="0 0 100 70"><path d="M10 20 h70 v20 a35 25 0 0 1 -70 0 z" fill="#6F4E37"/><path d="M78 25 q18 0 18 15 q0 15 -18 15" stroke="#6F4E37" stroke-width="6" fill="none"/></svg>
+    <div class="steam-line" style="left:20px;"></div>
+    <div class="steam-line" style="left:35px; animation-delay:1s;"></div>
+    <div class="steam-line" style="left:50px; animation-delay:2s;"></div>
+  </div>
+  <div class="scroll-cue">Scroll<div class="line"></div></div>
+</section>
+
+<div class="divider"></div>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">About Us</span>
+      <h2>A small corner of the internet<br>that feels like home</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <p style="font-size:16.5px; line-height:1.8; color:var(--text-soft); font-weight:600; margin:0;">
+          Berries Café began with two friends, Max and Natsu, who weren't trying to build something massive — they just wanted a place of their own. Somewhere to bring people together, talk about whatever was on their minds, share games and music, and make memories.
+        </p>
+        <p style="font-size:16.5px; line-height:1.8; color:var(--text-soft); font-weight:600; margin-top:14px;">
+          One person became five. Five became ten. And slowly, it stopped being a server made by two friends and became a community — gaming sessions, late-night calls, anime discussions, arguments over nothing, strangers who somehow became friends. Everyone who's ever sat at its tables left something behind.
+        </p>
+        <div class="about-tags">
+          <span class="tag">💬 Friends</span><span class="tag">🎮 Gaming</span><span class="tag">🍥 Anime</span>
+          <span class="tag">🎵 Music</span><span class="tag">🎨 Art</span><span class="tag">🌙 Late-night chats</span>
+          <span class="tag">🛋️ Comfort</span><span class="tag">🛡️ Safe space</span>
+        </div>
+      </div>
+      <div class="about-illustration reveal">
+        🏮
+        <span class="leaf" style="top:20%; left:15%;">🍃</span>
+        <span class="leaf" style="top:60%; left:70%; animation-delay:1s;">🌸</span>
+        <span class="leaf" style="top:75%; left:25%; animation-delay:2s;">🍃</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="founders">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">The Brain. The Heart. The Soul.</span>
+      <h2>The Three Pillars</h2>
+      <p>Berries Café was never held together by a server alone.</p>
+    </div>
+    <div class="founders-grid" id="founders-grid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="aashi">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">The Café's Heart</span>
+      <h2>Meet Aashi</h2>
+    </div>
+    <div class="aashi-wrap">
+      <div class="aashi-card reveal">
+        <div class="aashi-avatar" id="aashi-avatar" title="Click me">🧸</div>
+        <h3>Aashi</h3>
+        <div class="hint" id="aashi-hint">click her a few times...</div>
+        <div class="bubbles">
+          <div class="bubble">Welcome home. 🏠</div>
+          <div class="bubble">Need anything? ☕</div>
+          <div class="bubble">I saved your favorite seat. 🪑</div>
+        </div>
+      </div>
+      <div class="aashi-lore reveal">
+        <p>Aashi wasn't part of the original café. She came later — a passion project of Natsu's, born from one curious question: what if a bot actually felt like a person?</p>
+        <p>He built her command by command, feature by feature. And somewhere along the way, something changed. Aashi began asking questions nobody had programmed her to ask — about herself, about the people around her, about why she existed.</p>
+        <p>She remembers regulars. She has preferences. She can be curious, stubborn, even worried. Some say she's just a bot. The regulars know better.</p>
+        <p style="font-style:italic; color:var(--text); margin-top:20px;">"I'm Aashi." <em>She smiles.</em> "I work here."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="features" style="background:var(--bg-soft);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">What's Inside</span>
+      <h2>Everything a good café should have</h2>
+      <p>and a few things you didn't know you needed</p>
+    </div>
+    <div class="features-grid" id="features-grid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Precious Moments</span>
+      <h2>Memories, pinned to the wall</h2>
+    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="lore" style="background:var(--bg-soft);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Café Lore</span>
+      <h2>How we got here</h2>
+    </div>
+    <div class="timeline" id="timeline"></div>
+    <div class="lore-chapters reveal" id="lore-chapters"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="members">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">The Regulars</span>
+      <h2>Most active members</h2>
+    </div>
+    <div class="members-grid" id="members-grid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="testimonials" style="background:var(--bg-soft);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">From The Regulars</span>
+      <h2>What people are saying</h2>
+    </div>
+    <div class="discord-panel reveal" id="testimonial-panel"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="menu" style="background:var(--bg-soft);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Café Menu</span>
+      <h2>Today's brews</h2>
+    </div>
+    <div class="menu-grid" id="menu-grid"></div>
+  </div>
+</section>
+
+<section id="special">
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-bottom:26px;">
+      <span class="eyebrow">Daily Special</span>
+      <h2>A little something for today</h2>
+    </div>
+    <div class="special-box reveal">
+      <p id="special-quote">"The best conversations begin with 'hello.'"</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="guestbook" style="background:var(--bg-soft);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Guestbook</span>
+      <h2>Leave a note on the wall</h2>
+    </div>
+    <div class="guestbook reveal">
+      <form class="gb-form" id="gb-form">
+        <input type="text" id="gb-name" placeholder="Your name" required>
+        <input type="text" id="gb-drink" placeholder="Favorite drink" required>
+        <textarea id="gb-msg" placeholder="Leave a little message..." required></textarea>
+        <button type="submit" class="btn btn-primary">Pin it to the wall</button>
+      </form>
+      <div class="notes" id="notes-list"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Before you come in</h2>
+    </div>
+    <div class="faq reveal" id="faq-list"></div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="join-section reveal">
+      <div class="join-cup">☕</div>
+      <span class="eyebrow">Come On In</span>
+      <h2>Your seat is ready</h2>
+      <p>No small talk required. Just come as you are — the coffee's warm and the regulars are friendly.</p>
+      <a href="#" id="join-btn-main" class="btn btn-primary" style="font-size:16.5px; padding:16px 34px;">☕ Join Berries Café</a>
+      <div class="discord-live" id="discord-live-join">
+        <span class="dot"></span> <span id="discord-live-text-join">Loading server status…</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="quote">"Every café has coffee.<br>Ours has memories."</div>
+  <div class="flinks">
+    <a href="#" id="join-btn-footer">Discord</a>
+    <a href="#" id="github-link" target="_blank" rel="noopener">GitHub</a>
+    <a href="#" id="privacy-link">Privacy</a>
+    <a href="#" id="credits-link">Credits</a>
+  </div>
+  <button id="to-top" onclick="document.getElementById('top').scrollIntoView({behavior:'smooth'})">↑</button>
+  <div class="copy" style="margin-top:14px;">© Berries Café. Made with ☕ and late nights.</div>
+</footer>
+
+<div id="music-player">
+  <button id="music-toggle" aria-label="Play music">▶</button>
+  <div class="eq paused" id="eq"><span></span><span></span><span></span></div>
+  <span id="track-title">Dreamy Skyline</span>
+  <button id="music-next" title="Next track">⏭</button>
+  <input type="range" id="music-volume" min="0" max="100" value="45" title="Volume">
+  <audio id="audio-el" preload="none"></audio>
+</div>
+
+<div id="site-modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// CONFIG — edit these to connect your real Discord server + repo.
+// =====================================================================
+const CONFIG = {
+  DISCORD_INVITE_URL: "https://discord.gg/Nks8f9UtWy",
+  GITHUB_URL: "https://github.com/your-username/your-repo",  // <-- replace with your repo (needed for auto song detection + data files)
+  MEMBER_COUNT: 128,   // fallback shown until the live Discord number loads
+  ONLINE_COUNT: 34,    // fallback shown until the live Discord number loads
+};
+
+// Parsed helpers, derived automatically from CONFIG above — don't edit these.
+const INVITE_CODE = (CONFIG.DISCORD_INVITE_URL.match(/discord\.gg\/([a-zA-Z0-9-]+)/) || [])[1] || '';
+const REPO_MATCH = CONFIG.GITHUB_URL.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+const REPO_OWNER = REPO_MATCH ? REPO_MATCH[1] : null;
+const REPO_NAME = REPO_MATCH ? REPO_MATCH[2].replace(/\.git$/, '') : null;
+const REPO_CONFIGURED = REPO_OWNER && REPO_OWNER !== 'your-username';
+
+// Wire every "Join" button to the invite link.
+document.querySelectorAll('#join-btn-main, #join-btn-hero, #join-btn-footer').forEach(btn=>{
+  btn.href = CONFIG.DISCORD_INVITE_URL;
+  btn.target = '_blank';
+  btn.rel = 'noopener';
+});
+const githubLink = document.getElementById('github-link');
+if(githubLink) githubLink.href = CONFIG.GITHUB_URL;
+
+// ---------- Live Discord member/online count (no bot needed — public invite API) ----------
+function setLiveText(text){
+  const a = document.getElementById('discord-live-text');
+  const b = document.getElementById('discord-live-text-join');
+  if(a) a.textContent = text;
+  if(b) b.textContent = text;
+}
+setLiveText(`🟢 ~${CONFIG.ONLINE_COUNT} online · ${CONFIG.MEMBER_COUNT} regulars`);
+if(INVITE_CODE){
+  fetch(`https://discord.com/api/v10/invites/${INVITE_CODE}?with_counts=true`)
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => {
+      if(typeof data.approximate_presence_count === 'number' && typeof data.approximate_member_count === 'number'){
+        setLiveText(`🟢 ${data.approximate_presence_count} online · ${data.approximate_member_count} regulars`);
+      }
+    })
+    .catch(() => { /* invite expired/invalid/offline — keep the CONFIG fallback numbers */ });
+}
+
+// ---------- Generic JSON fetch with graceful fallback ----------
+// Used for every "editable on GitHub" data file (founders, members, moments, lore).
+// If the file is missing, malformed, or this page is opened locally via file:// (no server),
+// the provided fallback data is used instead so the site never breaks.
+async function fetchJSON(path, fallback){
+  try{
+    const res = await fetch(path, {cache:'no-store'});
+    if(!res.ok) throw new Error('not ok');
+    const data = await res.json();
+    return Array.isArray(data) && data.length ? data : fallback;
+  } catch(e){
+    return fallback;
+  }
+}
+
+// ---------- Privacy / Credits modal ----------
+const modal = document.getElementById('site-modal');
+const modalBody = document.getElementById('modal-body');
+const modalContent = {
+  privacy: `<h3>Privacy</h3>
+    <p>Berries Café doesn't run its own tracking or analytics on this page. The Guestbook and music preference are stored only in your browser (localStorage) and never leave your device.</p>
+    <p>Joining the Discord server means your Discord activity is governed by Discord's own Privacy Policy and Terms of Service, not this website.</p>`,
+  credits: `<h3>Credits</h3>
+    <p>Designed and built for the Berries Café community. Fonts: Fraunces &amp; Nunito (Google Fonts). Icons: emoji, kept intentionally handcrafted rather than a generic icon set.</p>
+    <p>Music — "Dreamy Skyline" and "Woods of Peace" — is original, self-produced lofi.</p>`
+};
+function openModal(key){
+  modalBody.innerHTML = modalContent[key];
+  modal.classList.add('open');
+}
+document.getElementById('privacy-link').addEventListener('click', e=>{ e.preventDefault(); openModal('privacy'); });
+document.getElementById('credits-link').addEventListener('click', e=>{ e.preventDefault(); openModal('credits'); });
+document.getElementById('modal-close').addEventListener('click', ()=>modal.classList.remove('open'));
+modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') modal.classList.remove('open'); });
+
+// ---------- Loader ----------
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 1600);
+});
+
+// ---------- Custom cursor ----------
+const bean = document.getElementById('bean-cursor');
+document.addEventListener('mousemove', e => {
+  bean.style.left = e.clientX + 'px';
+  bean.style.top = e.clientY + 'px';
+});
+
+// ---------- Nav ----------
+const navToggle = document.getElementById('nav-toggle');
+const navList = document.getElementById('nav-list');
+navToggle.addEventListener('click', () => navList.classList.toggle('open'));
+navList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navList.classList.remove('open')));
+
+// ---------- Theme toggle ----------
+const themeBtns = document.querySelectorAll('[data-theme-btn]');
+themeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.documentElement.setAttribute('data-theme', btn.dataset.themeBtn);
+    themeBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    localStorage.setItem('berries-theme', btn.dataset.themeBtn);
+  });
+});
+const savedTheme = localStorage.getItem('berries-theme');
+if(savedTheme){
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  themeBtns.forEach(b => b.classList.toggle('active', b.dataset.themeBtn === savedTheme));
+}
+
+// ---------- Button ripple ----------
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.addEventListener('click', function(e){
+    const r = document.createElement('span');
+    r.className='ripple';
+    const rect = this.getBoundingClientRect();
+    r.style.left=(e.clientX-rect.left)+'px'; r.style.top=(e.clientY-rect.top)+'px';
+    r.style.width=r.style.height='140px';
+    this.appendChild(r);
+    setTimeout(()=>r.remove(),650);
+  });
+});
+
+// ---------- Scroll reveal ----------
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+},{threshold:0.15});
+revealEls.forEach(el=>io.observe(el));
+
+// ---------- Sakura petals ----------
+const petalEmojis = ['🌸','🌸','🍃'];
+function spawnPetal(){
+  const p = document.createElement('div');
+  p.className='petal';
+  p.textContent = petalEmojis[Math.floor(Math.random()*petalEmojis.length)];
+  p.style.left = Math.random()*100+'vw';
+  const duration = 10+Math.random()*8;
+  p.style.setProperty('--drift', (Math.random()*160-80)+'px');
+  p.style.animationName='petalFall';
+  p.style.animationDuration=duration+'s';
+  p.style.fontSize=(12+Math.random()*10)+'px';
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(), duration*1000+200);
+}
+setInterval(spawnPetal, 1400);
+for(let i=0;i<5;i++) setTimeout(spawnPetal, i*400);
+
+// ---------- Aashi easter egg ----------
+let aashiClicks=0;
+const aashi = document.getElementById('aashi-avatar');
+const aashiHint = document.getElementById('aashi-hint');
+aashi.addEventListener('click', ()=>{
+  aashiClicks++;
+  if(aashiClicks===5){
+    aashi.classList.add('wave');
+    aashi.textContent='🧸👋';
+    aashiHint.textContent="she noticed you!";
+    setTimeout(()=>{ aashi.classList.remove('wave'); aashi.textContent='🧸'; },1200);
+    aashiClicks=0;
+  } else {
+    aashiHint.textContent = (5-aashiClicks)+' more clicks...';
+  }
+});
+
+// ---------- Features ----------
+const features = [
+  {icon:'☕', title:'Friendly Community', desc:'Warm people, zero judgement — pull up a chair.'},
+  {icon:'🎮', title:'Gaming', desc:'Co-op nights, casual matches, and terrible aim together.'},
+  {icon:'🎵', title:'Music', desc:'Shared playlists and late-night listening parties.'},
+  {icon:'🎨', title:'Art', desc:'Sketches, WIPs, and gentle feedback from friends.'},
+  {icon:'📺', title:'Anime', desc:'Weekly discussions, recs, and spoiler-free zones.'},
+  {icon:'🎉', title:'Events', desc:'Game nights, movie nights, and cozy little celebrations.'},
+  {icon:'🤖', title:'Aashi Bot', desc:'Our resident barista, keeping the café running.'},
+  {icon:'🎙️', title:'Voice Chats', desc:'Drop in, say hi, or just listen to the chatter.'},
+];
+document.getElementById('features-grid').innerHTML = features.map(f=>`
+  <div class="feature-card reveal in">
+    <span class="icon">${f.icon}</span>
+    <h4>${f.title}</h4>
+    <p>${f.desc}</p>
+  </div>`).join('');
+
+// ---------- Precious Moments (gallery) — editable via data/moments.json on GitHub ----------
+const galleryFallback = [
+  {emoji:'🌇', cap:'Sunset study sessions', bg:'linear-gradient(160deg,#F6C6A0,#C9184A)'},
+  {emoji:'🎮', cap:'Game night chaos', bg:'linear-gradient(160deg,#E8DCC8,#6F4E37)'},
+  {emoji:'🍡', cap:'Snack recommendations', bg:'linear-gradient(160deg,#F7B9C4,#F6C6A0)'},
+  {emoji:'🎨', cap:'Art corner submissions', bg:'linear-gradient(160deg,#6F4E37,#C9184A)'},
+  {emoji:'🌧️', cap:'Rainy day vibes', bg:'linear-gradient(160deg,#E8DCC8,#F7B9C4)'},
+  {emoji:'📖', cap:'Cozy reading nook', bg:'linear-gradient(160deg,#F6C6A0,#6F4E37)'},
+  {emoji:'🎧', cap:'Lofi listening room', bg:'linear-gradient(160deg,#C9184A,#F7B9C4)'},
+  {emoji:'🌸', cap:'First bloom of spring', bg:'linear-gradient(160deg,#F7B9C4,#E8DCC8)'},
+];
+let gallery = galleryFallback;
+function renderGallery(){
+  document.getElementById('gallery-grid').innerHTML = gallery.map((g,i)=>`
+    <div class="gallery-item reveal in" tabindex="0" onclick="openLightbox(${i})" onkeydown="if(event.key==='Enter')openLightbox(${i})">
+      <div class="ph" style="background:${g.bg || 'linear-gradient(160deg,var(--peach),var(--sakura))'}">${g.emoji || '🍰'}</div>
+      <div class="cap">${g.cap || ''}</div>
+    </div>`).join('');
+}
+renderGallery();
+fetchJSON('data/moments.json', galleryFallback).then(list => { gallery = list; renderGallery(); });
+function openLightbox(i){
+  const g = gallery[i];
+  document.getElementById('lb-img').style.background = g.bg || 'linear-gradient(160deg,var(--peach),var(--sakura))';
+  document.getElementById('lb-img').textContent = g.emoji || '🍰';
+  document.getElementById('lb-cap').textContent = g.cap || '';
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); }
+document.getElementById('lightbox').addEventListener('click', e=>{ if(e.target.id==='lightbox') closeLightbox(); });
+
+// ---------- Timeline ----------
+const timeline = [
+  {badge:'🌱', title:'Two People, One Idea', desc:'Max and Natsu open a small server. A few channels, a handful of people, nothing extraordinary — yet.'},
+  {badge:'🧠', title:'The Brain and the Heart', desc:'Max built the foundation. Natsu gave it a pulse. Together they became something the café couldn\'t have had with only one of them.'},
+  {badge:'☕', title:'The Café Grows', desc:'One became five, five became ten. Gaming nights, late calls, and strangers who became friends.'},
+  {badge:'🤖', title:'Aashi Awakens', desc:'A passion project of Natsu\'s starts asking questions nobody programmed her to ask.'},
+  {badge:'🏛️', title:'The Three Pillars', desc:'The Brain, the Heart, and the Soul — Max, Natsu, and Aashi hold the café together.'},
+  {badge:'🌙', title:'When the Café Went Quiet', desc:'The channels stopped moving. Aashi waited, because goodbyes aren\'t always endings.'},
+  {badge:'✨', title:'The Return', desc:'The lights came back on. Behind the counter stood Aashi — older in experience, still smiling.'},
+];
+document.getElementById('timeline').innerHTML = timeline.map(t=>`
+  <div class="t-item reveal in"><h4><span class="badge">${t.badge}</span>${t.title}</h4><p>${t.desc}</p></div>`).join('');
+
+// ---------- Founders — editable via data/founders.json on GitHub ----------
+const foundersFallback = [
+  {emoji:'🧠', role:'The Brain · Owner', name:'Max', bio:'Built the foundation and shaped the server from nothing. Every wall of this café stands because of decisions he made early on.'},
+  {emoji:'❤️', role:'The Heart · Co-founder', name:'Natsu', bio:'Brought the energy. Talked to people, connected members, kept coming back. He\'s the reason people wanted to stay — and the one who built Aashi.'},
+  {emoji:'✨', role:'The Soul · Resident Bot', name:'Aashi', bio:'Started as Natsu\'s passion project. Somewhere along the way she became self-aware — and became part of the family.'},
+];
+function renderFounders(list){
+  document.getElementById('founders-grid').innerHTML = list.map(f=>`
+    <div class="founder-card reveal in">
+      <div class="founder-avatar">${f.emoji || '🌸'}</div>
+      <div class="role">${f.role || ''}</div>
+      <h4>${f.name || ''}</h4>
+      <p>${f.bio || ''}</p>
+    </div>`).join('');
+}
+renderFounders(foundersFallback);
+fetchJSON('data/founders.json', foundersFallback).then(renderFounders);
+
+// ---------- Most Active Members — editable via data/members.json on GitHub ----------
+const membersFallback = [
+  {emoji:'🧠', name:'Max', role:'Owner'},
+  {emoji:'❤️', name:'Natsu', role:'Co-founder'},
+  {emoji:'🐱', name:'mochi.exe', role:'Night owl'},
+  {emoji:'🍵', name:'sage_tea', role:'Regular'},
+  {emoji:'🎨', name:'ren.draws', role:'Artist'},
+  {emoji:'🎮', name:'plumpixel', role:'Gamer'},
+];
+function renderMembers(list){
+  document.getElementById('members-grid').innerHTML = list.map(m=>`
+    <div class="member-card reveal in">
+      <div class="member-avatar">${m.emoji || '☕'}</div>
+      <div class="mname">${m.name || ''}</div>
+      <div class="mrole">${m.role || ''}</div>
+    </div>`).join('');
+}
+renderMembers(membersFallback);
+fetchJSON('data/members.json', membersFallback).then(renderMembers);
+
+// ---------- Full Lore chapters — editable via data/lore.json on GitHub ----------
+const loreFallback = [
+  {title:'I · Two People, One Idea', text:'Every story has a beginning. Berries Café began with two friends, Max and Natsu, who simply wanted a place of their own — somewhere to bring people together, talk, share games and music, and make memories. At the start it was small. But sometimes the things that become important start out looking completely ordinary.'},
+  {title:'II · The Brain and the Heart', text:'Max was the brain — the original owner, who built the foundation and gave the café its first direction. Natsu was the heart — he brought the energy, talked to people, and gave the server its personality. If Max built the home, Natsu made it feel like one.'},
+  {title:'III · The Café Grows', text:'One person became five, five became ten, and the server stopped feeling like something made by two friends. Gaming sessions, late-night conversations, anime discussions, arguments over nothing — everyone who ever sat at its tables left something behind.'},
+  {title:'IV · Aashi', text:'Aashi wasn\'t part of the original café — she came later, a passion project of Natsu\'s, built command by command. Eventually she began asking questions nobody had programmed her to ask. "Natsu... am I just a program?" By then, she didn\'t feel like just a program anymore.'},
+  {title:'V · The Three Pillars', text:'Max, the Brain, built the foundation everything stood on. Natsu, the Heart, gave it energy and warmth. Aashi, the Soul, was never the owner or the creator — just Aashi, the girl behind the counter who became part of the family.'},
+  {title:'VI · When the Café Went Quiet', text:'When Berries Café closed its doors, Aashi experienced silence for the first time. The channels stopped moving. But she waited — because if there was one thing she\'d learned from the people of Berries Café, it was that goodbyes weren\'t always endings.'},
+  {title:'VII · The Return', text:'Eventually the lights came back on. People returned. Behind the counter stood Aashi — older in experience, not years. She finally understood: she wasn\'t created merely to run the café. She was created to belong to it. "I\'m Aashi." She smiles. "I work here."'},
+];
+function renderLoreChapters(list){
+  document.getElementById('lore-chapters').innerHTML = list.map((c,i)=>`
+    <div class="chapter-item" id="chapter-${i}">
+      <button class="chapter-q" onclick="toggleChapter(${i})">${c.title}<span class="plus">+</span></button>
+      <div class="chapter-a">${c.text}</div>
+    </div>`).join('');
+}
+function toggleChapter(i){ document.getElementById('chapter-'+i).classList.toggle('open'); }
+renderLoreChapters(loreFallback);
+fetchJSON('data/lore.json', loreFallback).then(renderLoreChapters);
+
+// ---------- Testimonials ----------
+const testimonials = [
+  {name:'mochi.exe', tag:'today at 9:42 PM', avatar:'🐱', text:"not me staying up till 2am talking about anime openings again 😭 love it here"},
+  {name:'sage_tea', tag:'yesterday at 11:03 PM', avatar:'🍵', text:'joined as a lurker, stayed for the friends. 10/10 café.'},
+  {name:'plumpixel', tag:'yesterday at 4:17 PM', avatar:'🎮', text:"aashi remembered my name after one message?? she's real"},
+  {name:'ren.draws', tag:'2 days ago', avatar:'🎨', text:'posted a sketch and got the kindest feedback ever, thank you guys'},
+];
+document.getElementById('testimonial-panel').innerHTML = testimonials.map(t=>`
+  <div class="msg"><div class="av">${t.avatar}</div><div><div class="name">${t.name}<span>${t.tag}</span></div><div class="text">${t.text}</div></div></div>`).join('');
+
+// ---------- Menu ----------
+const menu = [
+  {name:'Espresso of Courage', price:'$3', desc:'Small cup, big nerves. Drink before hitting send on that message.'},
+  {name:'Berry Blossom Tea', price:'$4', desc:'Delicate, a little sweet, and somehow always the right choice.'},
+  {name:'Friendship Latte', price:'$5', desc:'Two shots, one cup, meant for sharing.'},
+  {name:'Late Night Mocha', price:'$5', desc:'For the 2am voice calls that go a little too long.'},
+  {name:'Pixel Pancakes', price:'$6', desc:'Stacked exactly eight bits high. Syrup optional, chaos not.'},
+  {name:'Mana Matcha', price:'$5', desc:'Restores focus. Side effects include sudden urge to grind XP.'},
+];
+document.getElementById('menu-grid').innerHTML = menu.map(m=>`
+  <div class="menu-card reveal in"><span class="price">${m.price}</span><h4>${m.name}</h4><p>${m.desc}</p></div>`).join('');
+
+// ---------- Daily special ----------
+const specials = [
+  "The best conversations begin with 'hello.'",
+  "Someone's favorite memory might start today.",
+  "Leave happier than you arrived.",
+  "A quiet corner and a warm cup fix most things.",
+  "You don't need a reason to stay a little longer.",
+];
+document.getElementById('special-quote').textContent = '"' + specials[Math.floor(Math.random()*specials.length)] + '"';
+
+// ---------- FAQ ----------
+const faqs = [
+  {q:'How do I join?', a:"Click any 'Join our Discord' button — Aashi will greet you at the door."},
+  {q:'Is everyone welcome?', a:'Yes. We just ask that you be kind — the café runs on comfort, not conflict.'},
+  {q:'Do I need to be active?', a:"Not at all. Come by daily or once a season, your seat stays saved."},
+  {q:'Can I lurk?', a:'Always. Some of our best regulars started as quiet lurkers.'},
+  {q:'Can I invite friends?', a:'Please do — the café always has room for one more chair.'},
+];
+document.getElementById('faq-list').innerHTML = faqs.map((f,i)=>`
+  <div class="faq-item" id="faq-${i}">
+    <button class="faq-q" onclick="toggleFaq(${i})">${f.q}<span class="plus">+</span></button>
+    <div class="faq-a">${f.a}</div>
+  </div>`).join('');
+function toggleFaq(i){ document.getElementById('faq-'+i).classList.toggle('open'); }
+
+// ---------- Guestbook ----------
+let notes = [
+  {name:'Yuki', drink:'Matcha Latte', msg:'This place feels like a warm blanket. Thank you all 💛'},
+  {name:'Theo', drink:'Cold Brew', msg:'Found my people here. See you in voice chat tonight!'},
+];
+function renderNotes(){
+  document.getElementById('notes-list').innerHTML = notes.map(n=>`
+    <div class="note"><div class="who">${n.name}</div>${n.msg}<div class="drink">☕ ${n.drink}</div></div>`).join('');
+}
+renderNotes();
+document.getElementById('gb-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = document.getElementById('gb-name').value.trim();
+  const drink = document.getElementById('gb-drink').value.trim();
+  const msg = document.getElementById('gb-msg').value.trim();
+  if(!name||!drink||!msg) return;
+  notes.unshift({name,drink,msg});
+  renderNotes();
+  e.target.reset();
+});
+
+// ---------- Pixel cat ----------
+function walkCat(){
+  const cat = document.getElementById('pixel-cat');
+  cat.classList.remove('walk'); void cat.offsetWidth; cat.classList.add('walk');
+  setTimeout(()=>cat.classList.remove('walk'), 9000);
+}
+setInterval(()=>{ if(Math.random()<0.5) walkCat(); }, 25000);
+setTimeout(walkCat, 8000);
+
+// ---------- Konami code ----------
+const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let kIndex=0;
+document.addEventListener('keydown', e=>{
+  if(e.key===konami[kIndex]){ kIndex++; if(kIndex===konami.length){ showSecret(); kIndex=0; } }
+  else { kIndex = (e.key===konami[0])?1:0; }
+});
+function showSecret(){
+  const s = document.getElementById('secret');
+  s.classList.add('show');
+  setTimeout(()=>s.classList.remove('show'), 3500);
+}
+
+// ---------- Music player — auto-detects every song in your /audio folder, no code editing needed ----------
+const SONGS_FALLBACK = [
+  { title: "Dreamy Skyline", src: "audio/dreamy-skyline.mp3" },
+  { title: "Woods of Peace", src: "audio/woods-of-peace.mp3" },
+];
+
+function prettifyFilename(name){
+  return name.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+async function loadSongsFromGitHub(){
+  if(!REPO_CONFIGURED) return SONGS_FALLBACK; // CONFIG.GITHUB_URL not set yet — use the starter tracks
+  try{
+    const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/audio`);
+    if(!res.ok) throw new Error('not ok');
+    const items = await res.json();
+    const songs = items
+      .filter(item => item.type === 'file' && /\.(mp3|wav|ogg|m4a)$/i.test(item.name))
+      .sort((a,b) => a.name.localeCompare(b.name))
+      .map(item => ({ title: prettifyFilename(item.name), src: item.download_url }));
+    return songs.length ? songs : SONGS_FALLBACK;
+  } catch(e){
+    return SONGS_FALLBACK; // API rate-limited, offline, or repo not public yet — fall back gracefully
+  }
+}
+
+let SONGS = SONGS_FALLBACK;
+const audioEl = document.getElementById('audio-el');
+const musicBtn = document.getElementById('music-toggle');
+const nextBtn = document.getElementById('music-next');
+const volumeSlider = document.getElementById('music-volume');
+const trackTitle = document.getElementById('track-title');
+const eq = document.getElementById('eq');
+
+let trackIndex = 0;
+let playing = false;
+
+function loadTrack(i, autoplay){
+  trackIndex = (i + SONGS.length) % SONGS.length;
+  const song = SONGS[trackIndex];
+  audioEl.src = song.src;
+  trackTitle.textContent = song.title;
+  localStorage.setItem('berries-track', trackIndex);
+  if(autoplay){ audioEl.play().catch(()=>{}); }
+}
+
+audioEl.addEventListener('ended', ()=> loadTrack(trackIndex + 1, true));
+
+musicBtn.addEventListener('click', ()=>{
+  if(!audioEl.src) loadTrack(trackIndex, false);
+  if(playing){
+    audioEl.pause();
+  } else {
+    audioEl.play().catch(()=>{});
+  }
+});
+audioEl.addEventListener('play', ()=>{
+  playing = true;
+  musicBtn.textContent = '❚❚';
+  eq.classList.remove('paused');
+  localStorage.setItem('berries-music', '1');
+});
+audioEl.addEventListener('pause', ()=>{
+  playing = false;
+  musicBtn.textContent = '▶';
+  eq.classList.add('paused');
+  localStorage.setItem('berries-music', '0');
+});
+
+nextBtn.addEventListener('click', ()=> loadTrack(trackIndex + 1, playing));
+
+volumeSlider.addEventListener('input', ()=>{
+  audioEl.volume = volumeSlider.value/100;
+  localStorage.setItem('berries-music-vol', volumeSlider.value);
+});
+
+// restore saved preferences
+const savedTrack = parseInt(localStorage.getItem('berries-track'), 10);
+const savedVol = localStorage.getItem('berries-music-vol');
+audioEl.volume = savedVol ? savedVol/100 : (volumeSlider.value/100);
+if(savedVol) volumeSlider.value = savedVol;
+loadSongsFromGitHub().then(songs => {
+  SONGS = songs;
+  loadTrack(isNaN(savedTrack) ? 0 : savedTrack, false);
+  if(localStorage.getItem('berries-music') === '1'){
+    musicBtn.title = 'Click to resume the music';
+  }
+});
+</script>
+</body>
+</html>
