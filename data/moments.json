@@ -1,0 +1,10 @@
+[
+  { "emoji": "🌇", "cap": "Sunset study sessions", "bg": "linear-gradient(160deg,#F6C6A0,#C9184A)" },
+  { "emoji": "🎮", "cap": "Game night chaos", "bg": "linear-gradient(160deg,#E8DCC8,#6F4E37)" },
+  { "emoji": "🍡", "cap": "Snack recommendations", "bg": "linear-gradient(160deg,#F7B9C4,#F6C6A0)" },
+  { "emoji": "🎨", "cap": "Art corner submissions", "bg": "linear-gradient(160deg,#6F4E37,#C9184A)" },
+  { "emoji": "🌧️", "cap": "Rainy day vibes", "bg": "linear-gradient(160deg,#E8DCC8,#F7B9C4)" },
+  { "emoji": "📖", "cap": "Cozy reading nook", "bg": "linear-gradient(160deg,#F6C6A0,#6F4E37)" },
+  { "emoji": "🎧", "cap": "Lofi listening room", "bg": "linear-gradient(160deg,#C9184A,#F7B9C4)" },
+  { "emoji": "🌸", "cap": "First bloom of spring", "bg": "linear-gradient(160deg,#F7B9C4,#E8DCC8)" }
+]

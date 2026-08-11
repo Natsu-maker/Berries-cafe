@@ -1,0 +1,8 @@
+[
+  { "emoji": "🧠", "name": "Max", "role": "Owner" },
+  { "emoji": "❤️", "name": "Natsu", "role": "Co-founder" },
+  { "emoji": "🐱", "name": "mochi.exe", "role": "Night owl" },
+  { "emoji": "🍵", "name": "sage_tea", "role": "Regular" },
+  { "emoji": "🎨", "name": "ren.draws", "role": "Artist" },
+  { "emoji": "🎮", "name": "plumpixel", "role": "Gamer" }
+]
